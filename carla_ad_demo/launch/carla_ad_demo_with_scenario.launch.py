@@ -115,21 +115,22 @@ def generate_launch_description():
                 'wait_for_ego': 'True'
             }.items()
         ),
-        launch_ros.actions.Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            output='screen',
-            remappings=[
-                (
-                    "carla/ego_vehicle/spectator_pose",
-                    "/carla/ego_vehicle/rgb_view/control/set_transform"
-                )
-            ],
-            arguments=[
-                '-d', os.path.join(get_package_share_directory('carla_ad_demo'), 'config/carla_ad_demo_ros2.rviz')],
-            on_exit=launch.actions.Shutdown()
-        )
+        # rviz2 node does not run without a display
+        # launch_ros.actions.Node(
+        #     package='rviz2',
+        #     executable='rviz2',
+        #     name='rviz2',
+        #     output='screen',
+        #     remappings=[
+        #         (
+        #             "carla/ego_vehicle/spectator_pose",
+        #             "/carla/ego_vehicle/rgb_view/control/set_transform"
+        #         )
+        #     ],
+        #     arguments=[
+        #         '-d', os.path.join(get_package_share_directory('carla_ad_demo'), 'config/carla_ad_demo_ros2.rviz')],
+        #     on_exit=launch.actions.Shutdown()
+        # )
     ])
     return ld
 
