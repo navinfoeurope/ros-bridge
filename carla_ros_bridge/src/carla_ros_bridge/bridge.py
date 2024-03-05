@@ -61,6 +61,7 @@ class CarlaRosBridge(CompatibleNode):
         :type params: dict
         """
         super(CarlaRosBridge, self).__init__("ros_bridge_node")
+        self.shutdown = None
 
     # pylint: disable=attribute-defined-outside-init
     def initialize_bridge(self, carla_world, params):
@@ -345,6 +346,8 @@ class CarlaRosBridge(CompatibleNode):
 
         :return:
         """
+        if self.shutdown is None:
+            return
         self.loginfo("Shutting down...")
         self.shutdown.set()
         if not self.sync_mode:
@@ -435,7 +438,7 @@ def main(args=None):
                     data = od_file.read()
                 carla_world = carla_client.generate_opendrive_world(str(data))
             else:
-                if carla_world.get_map().name != parameters["town"]:
+                if not carla_world.get_map().name.endswith(parameters["town"]):
                     carla_bridge.loginfo("Loading town '{}' (previous: '{}').".format(
                         parameters["town"], carla_world.get_map().name))
                     carla_world = carla_client.load_world(parameters["town"])
